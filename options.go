@@ -55,4 +55,10 @@ type Cacher interface {
 
 	// Close returns the connection back to the pool for storage drivers that utilize a pool.
 	Close()
+
+	// Forget clears the value from the cache for the particular key.
+	Forget(key string) error
+
+	// ForgetAll clears all values from the cache.
+	ForgetAll() error
 }

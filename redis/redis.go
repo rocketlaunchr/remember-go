@@ -81,3 +81,13 @@ func (c *RedisConn) Set(key string, expiration time.Duration, itemToStore interf
 func (c *RedisConn) Close() {
 	c.conn.Close()
 }
+
+func (c *RedisConn) Forget(key string) error {
+	_, err := c.conn.Do("DEL", key)
+	return err
+}
+
+func (c *RedisConn) ForgetAll() error {
+	_, err := c.conn.Do("FLUSHDB")
+	return err
+}

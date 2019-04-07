@@ -48,3 +48,13 @@ func (c *MemoryStore) Set(key string, expiration time.Duration, itemToStore inte
 }
 
 func (c *MemoryStore) Close() {}
+
+func (c *MemoryStore) Forget(key string) error {
+	c.cache.Delete(key)
+	return nil
+}
+
+func (c *MemoryStore) ForgetAll() error {
+	c.cache.Flush()
+	return nil
+}
