@@ -8,15 +8,14 @@ const logPatternBlue = "\x1b[36m%s\x1b[39;49m\n"
 //
 // Example:
 //
-// import log
+//  import log
 //
-// type aLogger struct {}
+//  type aLogger struct {}
 //
-// func (l aLogger) Log(format string, args ...interface{}) {
+//  func (l aLogger) Log(format string, args ...interface{}) {
 //     log.Printf(format, args...)
-// }
+//  }
 type Logger interface {
-
 	// Log follows the same pattern as fmt.Printf( ).
 	Log(format string, args ...interface{})
 }

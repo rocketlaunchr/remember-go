@@ -19,7 +19,7 @@ go get -u github.com/rocketlaunchr/remember-go
 
 ## QuickStart
 
-```
+```go
 import (
 	"github.com/gomodule/redigo/redis"
 	"github.com/rocketlaunchr/remember-go"
