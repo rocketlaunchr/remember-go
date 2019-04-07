@@ -41,7 +41,7 @@ type Conner interface {
 	Conn(ctx context.Context) (Cacher, error)
 }
 
-// Cacher
+// Cacher is the interface that all storage drivers must implement.
 type Cacher interface {
 	// StorePointer sets whether a storage driver requires the item to set be
 	// stored as a pointer or as a concrete value.

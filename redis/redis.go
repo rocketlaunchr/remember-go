@@ -10,16 +10,20 @@ import (
 	"github.com/rocketlaunchr/remember-go"
 )
 
+// RedisStore is used to create a redis-backed cache.
 type RedisStore struct {
 	pool *redis.Pool
 }
 
+// NewRedisStore creates a redis-backed cached directly from a redis
+// pool object.
 func NewRedisStore(redisPool *redis.Pool) *RedisStore {
 	return &RedisStore{
 		pool: redisPool,
 	}
 }
 
+// Conn will provide a single redis connection from the redis connection pool.
 func (c *RedisStore) Conn(ctx context.Context) (remember.Cacher, error) {
 
 	conn, err := c.pool.GetContext(ctx)

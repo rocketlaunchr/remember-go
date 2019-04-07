@@ -8,16 +8,21 @@ import (
 	"github.com/rocketlaunchr/remember-go"
 )
 
+// MemoryStore is used to create a in-memory cache.
 type MemoryStore struct {
 	cache *cache.Cache
 }
 
+// NewMemoryStore creates an in-memory cache where the expired items
+// are deleted based on the cleanupInterval duration.
 func NewMemoryStore(cleanupInterval time.Duration) *MemoryStore {
 	return &MemoryStore{
 		cache: cache.New(cache.NoExpiration, cleanupInterval),
 	}
 }
 
+// NewMemoryStoreFrom creates an in-memory cache directly a *cache.Cache
+// object.
 func NewMemoryStoreFrom(cache *cache.Cache) *MemoryStore {
 	return &MemoryStore{
 		cache: cache,
