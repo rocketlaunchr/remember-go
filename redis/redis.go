@@ -15,7 +15,7 @@ type RedisStore struct {
 	pool *redis.Pool
 }
 
-// NewRedisStore creates a redis-backed cached directly from a redis
+// NewRedisStore creates a redis-backed cache directly from a redis
 // pool object.
 func NewRedisStore(redisPool *redis.Pool) *RedisStore {
 	return &RedisStore{
