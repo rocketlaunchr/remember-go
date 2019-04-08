@@ -19,7 +19,8 @@ type Options struct {
 	// Logger, when set, will turn on excessive logging.
 	Logger Logger
 
-	// GobRegister registers the struct returned by SlowRetrieve function with the gob encoder.
+	// GobRegister registers with the gob encoder the data type returned by the
+	// SlowRetrieve function.
 	// Some storage drivers may require this to be set.
 	// Setting this to true will slightly impact concurrency performance.
 	// It is usually better to set this to false, but register all structs
@@ -29,8 +30,8 @@ type Options struct {
 	GobRegister bool
 }
 
-// SlowRetrieve obtains a value when the key is not found in the cache.
-// It is usually (but not limited to) a query to a database with additional
+// SlowRetrieve obtains a result when the key is not found in the cache.
+// It is usually (but not limited to) a query to a database with some additional
 // processing of the returned data. The function must return a value that is compatible
 // with the gob package for some storage drivers.
 type SlowRetrieve func(ctx context.Context) (interface{}, error)
@@ -43,7 +44,7 @@ type Conner interface {
 
 // Cacher is the interface that all storage drivers must implement.
 type Cacher interface {
-	// StorePointer sets whether a storage driver requires the item to set be
+	// StorePointer sets whether a storage driver requires itemToStore to be
 	// stored as a pointer or as a concrete value.
 	StorePointer() bool
 

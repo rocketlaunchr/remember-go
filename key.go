@@ -11,8 +11,8 @@ import (
 
 // CreateKey will generate a key based on the input arguments.
 // When prefix is true, the caller's name will be used to prefix the key in an attempt to make it unique.
-// The args can also be separated using sep. visual does not do anything. It is used at code level to easily
-// see how the key should look.
+// The args can also be separated using sep. visual performs no functionality. It is used at code level
+// to visually see how the key is structured.
 func CreateKey(prefix bool, sep string, visual string, args ...interface{}) string {
 	var output string
 
@@ -39,7 +39,7 @@ func CreateKey(prefix bool, sep string, visual string, args ...interface{}) stri
 	return output
 }
 
-// Hash returns a crc32 version of key.
+// Hash returns a crc32 hashed version of key.
 func Hash(key string) string {
 	return fmt.Sprintf("%08x\n", crc32.ChecksumIEEE([]byte(key)))
 }

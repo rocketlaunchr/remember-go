@@ -1,12 +1,12 @@
 Caching Slow Database Queries [![GoDoc](http://godoc.org/github.com/rocketlaunchr/remember-go?status.svg)](http://godoc.org/github.com/rocketlaunchr/remember-go) [![Go Report Card](https://goreportcard.com/badge/github.com/rocketlaunchr/remember-go)](https://goreportcard.com/report/github.com/rocketlaunchr/remember-go)
 ===============
 
-This package is used to cache the results of slow database queries in memory or redis.
-It can be used to cache any form of data. A redis and in-memory storage driver is provided.
+This package is used to cache the results of slow database queries in memory or Redis.
+It can be used to cache any form of data. A Redis and in-memory storage driver is provided.
 
-See [Article](https://medium.com/@rocketlaunchr.cloud/) for further details.
+See [Article](https://medium.com/@rocketlaunchr.cloud/caching-slow-database-queries-1085d308a0c9) for further details.
 
-The package is **production ready** and the API is stable. A variant of this package has been used in production for years.
+The package is **production ready** and the API is stable. A variant of this package has been used in production for over 1.5 years.
 Once the community creates more storage drivers, version 1.0.0 will be tagged. It is recommended your package manager locks to a commit id instead of the master branch directly.
 
 
