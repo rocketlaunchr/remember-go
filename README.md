@@ -81,7 +81,7 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
     stmt := `
         SELECT title
         FROM books
-        WHERE title = ?
+        WHERE title LIKE ?
         ORDER BY title
         LIMIT ?, 20
     `
