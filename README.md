@@ -19,6 +19,8 @@ go get -u github.com/rocketlaunchr/remember-go
 
 ## Create a Key
 
+Let’s assume the query’s argument is an arbitrary `search` term and a `page` number for pagination.
+
 ### CreateKeyStruct
 
 CreateKeyStruct can generate a JSON based key by providing a struct.
@@ -72,8 +74,10 @@ The package initially checks if data exists in the cache. If it doesn’t, then 
 type Result struct {
     Title string
 }
+
 slowQuery := func(ctx context.Context) (interface{}, error) {
     results := []Result{}
+
     stmt := `
         SELECT title
         FROM books
@@ -81,11 +85,13 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
         ORDER BY title
         LIMIT ?, 20
     `
+
     rows, err := db.QueryContext(ctx, stmt, search, (page-1)*20)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
+
     for rows.Next() {
         var title string
         if err := rows.Scan(&title); err != nil {
@@ -93,6 +99,7 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
         }
         results = append(results, Result{title})
     }
+
     return results, nil
 }
 ```
@@ -116,6 +123,11 @@ results, found, err := remember.Cache(ctx, ms, key, exp, slowQuery, remember.Opt
 return results.([]Result) // Type assert in order to use
 
 ```
+
+## Gob Register Errors
+
+The Redis storage driver stores the data in a `gob` encoded form. You have to register with the gob package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
+
 
 #
 
