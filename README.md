@@ -65,6 +65,11 @@ var rs = red.NewRedisStore(&redis.Pool{
 })
 ```
 
+### Memcached
+
+Check memcached branch for an experimental WIP storage driver.
+
+
 
 ## Create a SlowRetrieve Function
 
