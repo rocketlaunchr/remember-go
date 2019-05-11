@@ -1,6 +1,7 @@
 package remember
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"hash/crc32"
@@ -92,6 +93,20 @@ func CreateKeyStruct(strct interface{}) string {
 	}
 
 	b, _ := json.Marshal(out)
+	str, _ := compactJson(b)
 
-	return string(b)
+	return str
+}
+
+// compactJson will remove insignificant spaces to minimize storage space.
+func compactJson(src []byte) (string, error) {
+
+	dst := new(bytes.Buffer)
+
+	err := json.Compact(dst, src)
+	if err != nil {
+		return "", err
+	}
+
+	return dst.String(), nil
 }
