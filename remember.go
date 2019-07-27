@@ -114,7 +114,7 @@ fresh:
 	if err != nil {
 		// Storage failed
 		if logger != nil {
-			logger.Log(logPatternRed, "Could not store item to memcache key: "+key+" "+err.Error()+" "+fmt.Sprintf("%+v", itemToStore))
+			logger.Log(logPatternRed, "Could not store item to key: "+key+" "+err.Error()+" "+fmt.Sprintf("%+v", itemToStore))
 		}
 	}
 

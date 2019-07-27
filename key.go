@@ -42,7 +42,7 @@ func CreateKey(prefix bool, sep string, visual string, args ...interface{}) stri
 
 // Hash returns a crc32 hashed version of key.
 func Hash(key string) string {
-	return fmt.Sprintf("%08x\n", crc32.ChecksumIEEE([]byte(key)))
+	return fmt.Sprintf("%08x", crc32.ChecksumIEEE([]byte(key)))
 }
 
 // CreateKeyStruct generates a key by converting a struct into a JSON object.
