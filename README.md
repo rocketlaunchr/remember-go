@@ -67,9 +67,8 @@ var rs = red.NewRedisStore(&redis.Pool{
 
 ### Memcached
 
-Check memcached branch for an experimental WIP storage driver.
-
-
+An experimental (and untested) memcached driver is provided.
+It relies on Brad Fitz's [memcache driver](https://godoc.org/github.com/bradfitz/gomemcache/memcache).
 
 ## Create a SlowRetrieve Function
 
