@@ -36,14 +36,18 @@ func (c *RedisStore) Conn(ctx context.Context) (remember.Cacher, error) {
 	}, nil
 }
 
+// RedisConn represents a single connection to the redis pool.
 type RedisConn struct {
 	conn redis.Conn
 }
 
+// StorePointer sets whether a storage driver requires itemToStore to be
+// stored as a pointer or as a concrete value.
 func (c *RedisConn) StorePointer() bool {
 	return true
 }
 
+// Get returns a value from the cache if the key exists.
 func (c *RedisConn) Get(key string) (interface{}, bool, error) {
 
 	val, err := redis.Bytes(c.conn.Do("GET", key))
@@ -65,6 +69,7 @@ func (c *RedisConn) Get(key string) (interface{}, bool, error) {
 	return output, true, nil
 }
 
+// Set sets a item into the cache for a particular key.
 func (c *RedisConn) Set(key string, expiration time.Duration, itemToStore interface{}) error {
 
 	// Convert item to bytes
@@ -78,15 +83,18 @@ func (c *RedisConn) Set(key string, expiration time.Duration, itemToStore interf
 	return err
 }
 
+// Close returns the connection back to the pool for storage drivers that utilize a pool.
 func (c *RedisConn) Close() {
 	c.conn.Close()
 }
 
+// Forget clears the value from the cache for the particular key.
 func (c *RedisConn) Forget(key string) error {
 	_, err := c.conn.Do("DEL", key)
 	return err
 }
 
+// ForgetAll clears all values from the cache.
 func (c *RedisConn) ForgetAll() error {
 	_, err := c.conn.Do("FLUSHDB")
 	return err

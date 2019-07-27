@@ -7,39 +7,45 @@ import (
 	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
+	"github.com/rocketlaunchr/remember-go"
 )
 
-// MemachedStore is used to create a memcached-backed cache.
-type MemachedStore struct {
+// MemcachedStore is used to create a memcached-backed cache.
+type MemcachedStore struct {
 	client *memcache.Client
 }
 
-func NewMemachedStore(server ...string) *MemachedStore {
-	return &MemachedStore{
+// NewMemcachedStore creates a memcached-backed cache.
+func NewMemcachedStore(server ...string) *MemcachedStore {
+	return &MemcachedStore{
 		client: memcache.New(server...),
 	}
 }
 
-func NewMemachedStoreFromSelector(ss memcache.ServerSelector) *MemachedStore {
-	return &MemachedStore{
+// NewMemachedStoreFromSelector creates a memcached-backed cache.
+func NewMemachedStoreFromSelector(ss memcache.ServerSelector) *MemcachedStore {
+	return &MemcachedStore{
 		client: memcache.NewFromSelector(ss),
 	}
 }
 
-func (c *MemachedStore) Conn(ctx context.Context) (remember.Cacher, error) {
+// Conn does nothing for this storage driver.
+func (c *MemcachedStore) Conn(ctx context.Context) (remember.Cacher, error) {
 	return c, nil
 }
 
-func (c *MemachedStore) StorePointer() bool {
-	return false // Not sure if this should be true or false. Try with both.
+// StorePointer sets whether a storage driver requires itemToStore to be
+// stored as a pointer or as a concrete value.
+func (c *MemcachedStore) StorePointer() bool {
+	return false // Not sure if this should be true or false. Try with both?
 }
 
 // Get retrieves a value from the cache. The key must be at most 250 bytes in length.
-func (c *MemachedStore) Get(key string) (interface{}, bool, error) {
+func (c *MemcachedStore) Get(key string) (interface{}, bool, error) {
 
 	item, err := c.client.Get(key)
 	if err != nil {
-		if err == memcached.ErrCacheMiss {
+		if err == memcache.ErrCacheMiss {
 			return nil, false, nil
 		}
 		return nil, false, err
@@ -56,7 +62,7 @@ func (c *MemachedStore) Get(key string) (interface{}, bool, error) {
 }
 
 // Set stores a value in the cache. The key must be at most 250 bytes in length.
-func (c *MemachedStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
+func (c *MemcachedStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
 
 	var exp int32
 
@@ -80,12 +86,15 @@ func (c *MemachedStore) Set(key string, expiration time.Duration, itemToStore in
 	return c.client.Set(item)
 }
 
-func (c *MemachedStore) Close() {}
+// Close returns the connection back to the pool for storage drivers that utilize a pool.
+func (c *MemcachedStore) Close() {}
 
-func (c *MemachedStore) Forget(key string) error {
+// Forget clears the value from the cache for the particular key.
+func (c *MemcachedStore) Forget(key string) error {
 	return c.client.Delete(key)
 }
 
-func (c *MemachedStore) ForgetAll() error {
+// ForgetAll clears all values from the cache.
+func (c *MemcachedStore) ForgetAll() error {
 	return c.client.DeleteAll()
 }
