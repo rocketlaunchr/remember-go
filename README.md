@@ -68,7 +68,7 @@ var rs = red.NewRedisStore(&redis.Pool{
 ### Memcached
 
 An experimental (and untested) memcached driver is provided.
-It relies on Brad Fitz's [memcache driver](https://godoc.org/github.com/bradfitz/gomemcache/memcache).
+It relies on Brad Fitzpatrick's [memcache driver](https://godoc.org/github.com/bradfitz/gomemcache/memcache).
 
 ## Create a SlowRetrieve Function
 
