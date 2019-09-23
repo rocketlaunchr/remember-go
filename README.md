@@ -8,6 +8,8 @@ See [Article](https://medium.com/@rocketlaunchr.cloud/caching-slow-database-quer
 
 The package is **production ready** and the API is stable. A variant of this package has been used in production for over 1.5 years.
 
+⭐ **the project to show your appreciation.**
+
 ## Installation
 
 ```
@@ -142,5 +144,3 @@ The license is a modified MIT license. Refer to `LICENSE` file for more details.
 ### Final Notes
 
 Feel free to enhance features by issuing pull-requests.
-
-**Star** the project to show your appreciation.
