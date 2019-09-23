@@ -3,6 +3,7 @@ package remember_test
 import (
 	"context"
 	"log"
+	"regexp"
 	"testing"
 	"time"
 
@@ -28,19 +29,28 @@ func TestKeyGen(t *testing.T) {
 			Page        int
 		}{"search", "z", "y", "ppp", 1}),
 		remember.Hash("crc32-hash"),
+		remember.CreateKey(true, "", "", 1, 2, 3),
 	}
 
 	expected := []string{
 		"1+2+3",
 		`{"Page":1,"Search":"search","xxx":"ppp"}`,
 		"40ffd476",
+		`^github.com/rocketlaunchr/remember-go_test.TestKeyGen_.+?github.com/rocketlaunchr/remember-go/remember_test.go_\d+_1 2 3$`,
 	}
 
 	for i := range actuals {
 		actual := actuals[i]
 
-		if actual != expected[i] {
-			t.Errorf("wrong val: expected: %v actual: %v", expected[i], actual)
+		if i == 3 {
+			match, _ := regexp.MatchString(expected[i], actual)
+			if !match {
+				t.Errorf("wrong val: expected (regex): %v actual: %v", expected[i], actual)
+			}
+		} else {
+			if actual != expected[i] {
+				t.Errorf("wrong val: expected: %v actual: %v", expected[i], actual)
+			}
 		}
 	}
 }
