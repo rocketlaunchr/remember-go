@@ -86,10 +86,11 @@ func TestFetchFromCacheAndDisableCache(t *testing.T) {
 		return "val", nil
 	}
 
-	actual, _, _ := remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{Logger: aLogger{}, GobRegister: true})
+	// warm up cache
+	remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{Logger: aLogger{}, GobRegister: true})
 
 	// This time fetch from cache
-	actual, _, _ = remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{Logger: aLogger{}, GobRegister: true})
+	actual, _, _ := remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{Logger: aLogger{}, GobRegister: true})
 
 	expected := "val"
 
