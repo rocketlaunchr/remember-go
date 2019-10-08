@@ -1,5 +1,4 @@
-Caching Slow Database Queries [![GoDoc](http://godoc.org/github.com/rocketlaunchr/remember-go?status.svg)](http://godoc.org/github.com/rocketlaunchr/remember-go) [![Go Report Card](https://goreportcard.com/badge/github.com/rocketlaunchr/remember-go)](https://goreportcard.com/report/github.com/rocketlaunchr/remember-go) [![GoCover](https://gocover.io/_badge/github.com/rocketlaunchr/remember-go)](https://gocover.io/github.com/rocketlaunchr/remember-go)
-===============
+# Caching Slow Database Queries [![GoDoc](http://godoc.org/github.com/rocketlaunchr/remember-go?status.svg)](http://godoc.org/github.com/rocketlaunchr/remember-go) [![Go Report Card](https://goreportcard.com/badge/github.com/rocketlaunchr/remember-go)](https://goreportcard.com/report/github.com/rocketlaunchr/remember-go) [![GoCover](https://gocover.io/_badge/github.com/rocketlaunchr/remember-go)](https://gocover.io/github.com/rocketlaunchr/remember-go)
 
 This package is used to cache the results of slow database queries in memory or Redis.
 It can be used to cache any form of data. A Redis and in-memory storage driver is provided.
@@ -15,7 +14,6 @@ The package is **production ready** and the API is stable. A variant of this pac
 ```
 go get -u github.com/rocketlaunchr/remember-go
 ```
-
 
 ## Create a Key
 
@@ -33,7 +31,6 @@ type Key struct {
 
 var key string = remember.CreateKeyStruct(Key{"golang", 2})
 ```
-
 
 ### CreateKey
 
@@ -59,9 +56,9 @@ The Redis storage driver relies on Gary Burd’s excellent [Redis client library
 
 ```go
 var rs = red.NewRedisStore(&redis.Pool{
-	Dial: func() (redis.Conn, error) {
-		return redis.Dial("tcp", "localhost:6379")
-	},
+    Dial: func() (redis.Conn, error) {
+        return redis.Dial("tcp", "localhost:6379")
+    },
 })
 ```
 
@@ -112,10 +109,10 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
 
 ```go
 import (
-	"github.com/gomodule/redigo/redis"
-	"github.com/rocketlaunchr/remember-go"
-	"github.com/rocketlaunchr/remember-go/memory"
-	red "github.com/rocketlaunchr/remember-go/redis"
+    "github.com/gomodule/redigo/redis"
+    "github.com/rocketlaunchr/remember-go"
+    "github.com/rocketlaunchr/remember-go/memory"
+    red "github.com/rocketlaunchr/remember-go/redis"
 )
 
 
@@ -130,8 +127,15 @@ return results.([]Result) // Type assert in order to use
 
 ## Gob Register Errors
 
-The Redis storage driver stores the data in a `gob` encoded form. You have to register with the gob package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
+The Redis storage driver stores the data in a [`gob`](https://golang.org/pkg/encoding/gob/) encoded form. You have to register with the gob package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
 
+## Other useful packages
+
+-   [dataframe-go](https://github.com/rocketlaunchr/remember-go) - Statistics and data manipulation
+-   [dbq](https://github.com/rocketlaunchr/dbq) - Zero boilerplate database operations for Go
+-   [igo](https://github.com/rocketlaunchr/igo) - A Go transpiler with cool new syntax such as `fordefer` (defer for for-loops)
+-   [mysql-go](https://github.com/rocketlaunchr/mysql-go) - Properly cancel slow MySQL queries
+-   [react](https://github.com/rocketlaunchr/react) - Build front end applications using Go
 
 #
 
