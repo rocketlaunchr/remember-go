@@ -133,7 +133,7 @@ return results.([]Result) // Type assert in order to use
 
 ## Gob Register Errors
 
-The Redis storage driver stores the data in a [`gob`](https://golang.org/pkg/encoding/gob/) encoded form. You have to register with the gob package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
+The Redis storage driver stores the data in a `gob` encoded form. You have to register with the [`gob`](https://golang.org/pkg/encoding/gob/) package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
 
 ## Other useful packages
 
