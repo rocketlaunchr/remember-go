@@ -41,7 +41,7 @@ func (c *MemcachedStore) StorePointer() bool {
 }
 
 // Get retrieves a value from the cache. The key must be at most 250 bytes in length.
-func (c *MemcachedStore) Get(key string) (interface{}, bool, error) {
+func (c *MemcachedStore) Get(key string) (_ interface{}, found bool, _ error) {
 
 	item, err := c.client.Get(key)
 	if err != nil {

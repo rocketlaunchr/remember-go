@@ -50,7 +50,7 @@ func (r *RistrettoStore) StorePointer() bool {
 // It is possible for nil to be returned while found is also true.
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.Get
-func (r *RistrettoStore) Get(key string) (interface{}, bool, error) {
+func (r *RistrettoStore) Get(key string) (_ interface{}, found bool, _ error) {
 	item, found := r.Cache.Get(key)
 	return item, found, nil
 }
