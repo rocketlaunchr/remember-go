@@ -40,7 +40,7 @@ func (c *MemoryStore) StorePointer() bool {
 }
 
 // Get returns a value from the cache if the key exists.
-func (c *MemoryStore) Get(key string) (interface{}, bool, error) {
+func (c *MemoryStore) Get(key string) (_ interface{}, found bool, _ error) {
 	item, found := c.cache.Get(key)
 	return item, found, nil
 }
