@@ -48,7 +48,7 @@ func (c *RedisConn) StorePointer() bool {
 }
 
 // Get returns a value from the cache if the key exists.
-func (c *RedisConn) Get(key string) (interface{}, bool, error) {
+func (c *RedisConn) Get(key string) (_ interface{}, found bool, _ error) {
 
 	val, err := redis.Bytes(c.conn.Do("GET", key))
 	if err != nil {

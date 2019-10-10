@@ -67,6 +67,12 @@ var rs = red.NewRedisStore(&redis.Pool{
 An experimental (and untested) memcached driver is provided.
 It relies on Brad Fitzpatrick's [memcache driver](https://godoc.org/github.com/bradfitz/gomemcache/memcache).
 
+### Ristretto
+
+DGraph's [Ristretto](https://github.com/dgraph-io/ristretto) is a fast, fixed size, in-memory cache with a dual focus on throughput and hit ratio performance.
+
+The API is potentially still in flux so no backward compatibility guarantee is provided for this driver.
+
 ## Create a SlowRetrieve Function
 
 The package initially checks if data exists in the cache. If it doesn’t, then it elegantly fetches the data directly from the database by calling the `SlowRetrieve` function. It then saves the data into the cache so that next time it doesn’t have to refetch it from the database.
@@ -127,7 +133,7 @@ return results.([]Result) // Type assert in order to use
 
 ## Gob Register Errors
 
-The Redis storage driver stores the data in a [`gob`](https://golang.org/pkg/encoding/gob/) encoded form. You have to register with the gob package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
+The Redis storage driver stores the data in a `gob` encoded form. You have to register with the [`gob`](https://golang.org/pkg/encoding/gob/) package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
 
 ## Other useful packages
 
