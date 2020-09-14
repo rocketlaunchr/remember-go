@@ -149,7 +149,7 @@ The Redis storage driver stores the data in a `gob` encoded form. You have to re
 
 The license is a modified MIT license. Refer to `LICENSE` file for more details.
 
-**© 2019 PJ Engineering and Business Solutions Pty. Ltd.**
+**© 2019-20 PJ Engineering and Business Solutions Pty. Ltd.**
 
 ### Final Notes
 

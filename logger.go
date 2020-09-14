@@ -1,3 +1,5 @@
+// Copyright 2019-20 PJ Engineering and Business Solutions Pty. Ltd. All rights reserved.
+
 package remember
 
 const logPatternRed = "\x1b[31m%s\x1b[39;49m\n"
