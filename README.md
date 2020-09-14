@@ -1,11 +1,17 @@
-# Caching Slow Database Queries [![GoDoc](http://godoc.org/github.com/rocketlaunchr/remember-go?status.svg)](http://godoc.org/github.com/rocketlaunchr/remember-go) [![Go Report Card](https://goreportcard.com/badge/github.com/rocketlaunchr/remember-go)](https://goreportcard.com/report/github.com/rocketlaunchr/remember-go) [![GoCover](https://gocover.io/_badge/github.com/rocketlaunchr/remember-go)](https://gocover.io/github.com/rocketlaunchr/remember-go)
+<p align="right">
+  <a href="http://godoc.org/github.com/rocketlaunchr/remember-go"><img src="http://godoc.org/github.com/rocketlaunchr/remember-go?status.svg" /></a>
+  <a href="https://goreportcard.com/report/github.com/rocketlaunchr/remember-go"><img src="https://goreportcard.com/badge/github.com/rocketlaunchr/remember-go" /></a>
+  <a href="https://gocover.io/github.com/rocketlaunchr/remember-go"><img src="http://gocover.io/_badge/github.com/rocketlaunchr/remember-go" /></a>
+</p>
+
+# Caching Slow Database Queries
 
 This package is used to cache the results of slow database queries in memory or Redis.
 It can be used to cache any form of data. A Redis and in-memory storage driver is provided.
 
 See [Article](https://medium.com/@rocketlaunchr.cloud/caching-slow-database-queries-1085d308a0c9) for further details including a tutorial.
 
-The package is **production ready** and the API is stable. A variant of this package has been used in production for over 1.5 years.
+The package is **production ready** and the API is stable. A variant of this package has been used in production for over 3 years.
 
 ⭐ **the project to show your appreciation.**
 
@@ -71,8 +77,6 @@ It relies on Brad Fitzpatrick's [memcache driver](https://godoc.org/github.com/b
 
 DGraph's [Ristretto](https://github.com/dgraph-io/ristretto) is a fast, fixed size, in-memory cache with a dual focus on throughput and hit ratio performance.
 
-The API is potentially still in flux so no backward compatibility guarantee is provided for this driver.
-
 ## Create a SlowRetrieve Function
 
 The package initially checks if data exists in the cache. If it doesn’t, then it elegantly fetches the data directly from the database by calling the `SlowRetrieve` function. It then saves the data into the cache so that next time it doesn’t have to refetch it from the database.
@@ -87,23 +91,15 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
 
     stmt := `
         SELECT title
-        FROM books
-        WHERE title LIKE ?
-        ORDER BY title
-        LIMIT ?, 20
+        FROM books WHERE title LIKE ?
+        ORDER BY title LIMIT ?, 20
     `
 
-    rows, err := db.QueryContext(ctx, stmt, search, (page-1)*20)
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+    rows, _ := db.QueryContext(ctx, stmt, search, (page-1)*20)
 
     for rows.Next() {
         var title string
-        if err := rows.Scan(&title); err != nil {
-            return nil, err
-        }
+        rows.Scan(&title)
         results = append(results, Result{title})
     }
 
@@ -114,13 +110,10 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
 ## Usage
 
 ```go
-import (
-    "github.com/gomodule/redigo/redis"
-    "github.com/rocketlaunchr/remember-go"
-    "github.com/rocketlaunchr/remember-go/memory"
-    red "github.com/rocketlaunchr/remember-go/redis"
-)
-
+import  "github.com/gomodule/redigo/redis"
+import  "github.com/rocketlaunchr/remember-go"
+import  "github.com/rocketlaunchr/remember-go/memory"
+import  red "github.com/rocketlaunchr/remember-go/redis"
 
 key := remember.CreateKeyStruct(Key{"golang", 2})
 exp := 10*time.Minute
@@ -128,7 +121,6 @@ exp := 10*time.Minute
 results, found, err := remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{GobRegister: false})
 
 return results.([]Result) // Type assert in order to use
-
 ```
 
 ## Gob Register Errors
