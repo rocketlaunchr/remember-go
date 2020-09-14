@@ -47,9 +47,8 @@ var key string = remember.CreateKeyStruct(Key{"golang", 2})
 CreateKey provides more flexibility to generate keys:
 
 ```go
-key :=  remember.CreateKey(false, "-", "search-x-y", "search", "golang", 2)
-
 // Key will be "search-golang-2"
+key :=  remember.CreateKey(false, "-", "search-x-y", "search", "golang", 2)
 ```
 
 ## Initialize the Storage Driver

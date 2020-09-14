@@ -58,6 +58,7 @@ func (r *RistrettoStore) Get(key string) (_ interface{}, found bool, _ error) {
 }
 
 // Set sets a item into the cache for a particular key.
+// The cost is always set to 1.
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.SetWithTTL
 func (r *RistrettoStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
