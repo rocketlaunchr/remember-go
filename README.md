@@ -53,6 +53,8 @@ key :=  remember.CreateKey(false, "-", "search-x-y", "search", "golang", 2)
 ### In-Memory
 
 ```go
+import "github.com/rocketlaunchr/remember-go/memory"
+
 var ms = memory.NewMemoryStore(10 * time.Minute)
 ```
 
@@ -61,6 +63,9 @@ var ms = memory.NewMemoryStore(10 * time.Minute)
 The Redis storage driver relies on Gary Burd’s excellent [Redis client library](https://github.com/gomodule/redigo/).
 
 ```go
+import red "github.com/rocketlaunchr/remember-go/redis"
+import "github.com/gomodule/redigo/redis"
+
 var rs = red.NewRedisStore(&redis.Pool{
     Dial: func() (redis.Conn, error) {
         return redis.Dial("tcp", "localhost:6379")
@@ -110,11 +115,6 @@ slowQuery := func(ctx context.Context) (interface{}, error) {
 ## Usage
 
 ```go
-import  "github.com/gomodule/redigo/redis"
-import  "github.com/rocketlaunchr/remember-go"
-import  "github.com/rocketlaunchr/remember-go/memory"
-import  red "github.com/rocketlaunchr/remember-go/redis"
-
 key := remember.CreateKeyStruct(Key{"golang", 2})
 exp := 10*time.Minute
 
