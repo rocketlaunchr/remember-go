@@ -137,11 +137,12 @@ The Redis storage driver stores the data in a `gob` encoded form. You have to re
 
 ## Other useful packages
 
--   [dataframe-go](https://github.com/rocketlaunchr/dataframe-go) - Statistics and data manipulation
--   [dbq](https://github.com/rocketlaunchr/dbq) - Zero boilerplate database operations for Go
--   [igo](https://github.com/rocketlaunchr/igo) - A Go transpiler with cool new syntax such as `fordefer` (defer for for-loops)
--   [mysql-go](https://github.com/rocketlaunchr/mysql-go) - Properly cancel slow MySQL queries
--   [react](https://github.com/rocketlaunchr/react) - Build front end applications using Go
+- [dataframe-go](https://github.com/rocketlaunchr/dataframe-go) - For statistics, machine-learning, and data manipulation/exploration
+- [dbq](https://github.com/rocketlaunchr/dbq) - Zero boilerplate database operations for Go
+- [electron-alert](https://github.com/rocketlaunchr/electron-alert) - SweetAlert2 for Electron Applications
+- [igo](https://github.com/rocketlaunchr/igo) - A Go transpiler with cool new syntax such as fordefer (defer for for-loops)
+- [mysql-go](https://github.com/rocketlaunchr/mysql-go) - Properly cancel slow MySQL queries
+- [react](https://github.com/rocketlaunchr/react) - Build front end applications using Go
 
 #
 
