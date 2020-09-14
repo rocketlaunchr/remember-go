@@ -4,6 +4,10 @@
   <a href="https://gocover.io/github.com/rocketlaunchr/remember-go"><img src="http://gocover.io/_badge/github.com/rocketlaunchr/remember-go" /></a>
 </p>
 
+<p align="center">
+<img src="https://github.com/rocketlaunchr/remember-go/raw/master/assets/logo.png" alt="dataframe-go" />
+</p>
+
 # Caching Slow Database Queries
 
 This package is used to cache the results of slow database queries in memory or Redis.
