@@ -58,11 +58,10 @@ func (r *RistrettoStore) Get(key string) (_ interface{}, found bool, _ error) {
 }
 
 // Set sets a item into the cache for a particular key.
-// cost must be converted to a time.Duration despite being unrelated to time.
 //
-// See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.Set
-func (r *RistrettoStore) Set(key string, cost time.Duration, itemToStore interface{}) error {
-	stored := r.Cache.Set(key, itemToStore, int64(cost))
+// See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.SetWithTTL
+func (r *RistrettoStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
+	stored := r.Cache.SetWithTTL(key, itemToStore, 1, expiration)
 	if stored {
 		return nil
 	}
