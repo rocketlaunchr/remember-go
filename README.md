@@ -8,7 +8,7 @@
 <img src="https://github.com/rocketlaunchr/remember-go/raw/master/assets/logo.png" alt="dataframe-go" />
 </p>
 
-# Caching Slow Database Queries
+# Cache Slow Database Queries
 
 This package is used to cache the results of slow database queries in memory or Redis.
 It can be used to cache any form of data. A Redis and in-memory storage driver is provided.
