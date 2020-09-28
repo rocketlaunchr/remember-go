@@ -18,8 +18,12 @@ type Options struct {
 	// The pulled data will subsequently be saved in the cache.
 	UseFreshData bool
 
-	// Logger, when set, will turn on excessive logging.
+	// Logger, when set, will log error and debug messages.
 	Logger Logger
+
+	// OnlyLogErrors, when set, will only log errors (but not debug messages).
+	// For production, this should be set to true.
+	OnlyLogErrors bool
 
 	// GobRegister registers with the gob encoder the data type returned by the
 	// SlowRetrieve function.

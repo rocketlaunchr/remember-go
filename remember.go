@@ -15,10 +15,11 @@ import (
 func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, fn SlowRetrieve, options ...Options) (_ interface{}, found bool, _ error) {
 
 	var (
-		disableCache bool
-		fresh        bool
-		logger       Logger
-		gobRegister  bool
+		disableCache  bool
+		fresh         bool
+		logger        Logger
+		gobRegister   bool
+		onlyLogErrors bool
 	)
 
 	if options != nil {
@@ -26,17 +27,18 @@ func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, 
 		fresh = options[0].UseFreshData
 		logger = options[0].Logger
 		gobRegister = options[0].GobRegister
+		onlyLogErrors = options[0].OnlyLogErrors
 	}
 
 	// Check if cache has been disabled
 	if disableCache {
-		if logger != nil {
+		if logger != nil && !onlyLogErrors {
 			logger.Log(logPatternBlue, "[cache disabled] Grabbing from SlowRetrieve key: "+key)
 		}
 
 		out, err := fn(ctx)
 		if err != nil {
-			if logger != nil {
+			if logger != nil && !onlyLogErrors {
 				logger.Log(logPatternBlue, "[cache disabled] Grabbing (cache disabled) from SlowRetrieve key: "+key+" error: "+err.Error())
 			}
 			return nil, false, err
@@ -58,7 +60,7 @@ func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, 
 	var item interface{}
 
 	if fresh {
-		if logger != nil {
+		if logger != nil && !onlyLogErrors {
 			logger.Log(logPatternBlue, "Grabbing (fresh) from SlowRetrieve key: "+key)
 		}
 		goto fresh
@@ -75,14 +77,14 @@ func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, 
 
 	if found && err == nil {
 		// Item exists in cache
-		if logger != nil {
+		if logger != nil && !onlyLogErrors {
 			logger.Log(logPatternBlue, "Found in Cache key: "+key)
 		}
 
 		return item, true, nil
 	}
 
-	if logger != nil {
+	if logger != nil && !onlyLogErrors {
 		logger.Log(logPatternBlue, "Grabbing from SlowRetrieve key: "+key)
 	}
 
