@@ -1,27 +1,32 @@
 // Copyright 2018-20 PJ Engineering and Business Solutions Pty. Ltd. All rights reserved.
 
-package ristretto_test
+package redis_test
 
 import (
 	"context"
 	"testing"
 	"time"
 
-	rist "github.com/dgraph-io/ristretto"
+	"github.com/alicebob/miniredis/v2"
+	"github.com/gomodule/redigo/redis"
 	"github.com/rocketlaunchr/remember-go"
-	"github.com/rocketlaunchr/remember-go/ristretto"
+	red "github.com/rocketlaunchr/remember-go/redis"
 )
-
-var cfg = &rist.Config{
-	NumCounters: 1e7,     // number of keys to track frequency of (10M).
-	MaxCost:     1 << 30, // maximum cost of cache (1GB).
-	BufferItems: 64,      // number of keys per Get buffer.
-}
 
 var ctx = context.Background()
 
 func TestKeyBasicOperation(t *testing.T) {
-	var ms = ristretto.NewRistrettoStore(cfg)
+	s, err := miniredis.Run()
+	if err != nil {
+		panic(err)
+	}
+	defer s.Close()
+
+	var rs = red.NewRedisStore(&redis.Pool{
+		Dial: func() (redis.Conn, error) {
+			return redis.Dial("tcp", s.Addr())
+		},
+	})
 
 	key := "key"
 	exp := 10 * time.Minute
@@ -30,7 +35,7 @@ func TestKeyBasicOperation(t *testing.T) {
 		return "val", nil
 	}
 
-	actual, _, _ := remember.Cache(ctx, ms, key, exp, slowQuery)
+	actual, _, _ := remember.Cache(ctx, rs, key, exp, slowQuery)
 
 	expected := "val"
 
@@ -40,7 +45,17 @@ func TestKeyBasicOperation(t *testing.T) {
 }
 
 func TestFetchFromCacheAndDisableCache(t *testing.T) {
-	var ms = ristretto.NewRistrettoStore(cfg)
+	s, err := miniredis.Run()
+	if err != nil {
+		panic(err)
+	}
+	defer s.Close()
+
+	var rs = red.NewRedisStore(&redis.Pool{
+		Dial: func() (redis.Conn, error) {
+			return redis.Dial("tcp", s.Addr())
+		},
+	})
 
 	key := "key"
 	exp := 10 * time.Minute
@@ -50,10 +65,10 @@ func TestFetchFromCacheAndDisableCache(t *testing.T) {
 	}
 
 	// warm up cache
-	remember.Cache(ctx, ms, key, exp, slowQuery)
+	remember.Cache(ctx, rs, key, exp, slowQuery)
 
 	// This time fetch from cache
-	actual, _, _ := remember.Cache(ctx, ms, key, exp, slowQuery)
+	actual, _, _ := remember.Cache(ctx, rs, key, exp, slowQuery)
 
 	expected := "val"
 
@@ -67,7 +82,7 @@ func TestFetchFromCacheAndDisableCache(t *testing.T) {
 		return "val2", nil
 	}
 
-	actual, _, _ = remember.Cache(ctx, ms, key, exp, slowQuery, remember.Options{DisableCacheUsage: true})
+	actual, _, _ = remember.Cache(ctx, rs, key, exp, slowQuery, remember.Options{DisableCacheUsage: true})
 
 	expected = "val2"
 
