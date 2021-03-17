@@ -14,21 +14,21 @@ import (
 
 // RedisStore is used to create a redis-backed cache.
 type RedisStore struct {
-	pool *redis.Pool
+	Pool *redis.Pool
 }
 
 // NewRedisStore creates a redis-backed cache directly from a redis
 // pool object.
 func NewRedisStore(redisPool *redis.Pool) *RedisStore {
 	return &RedisStore{
-		pool: redisPool,
+		Pool: redisPool,
 	}
 }
 
 // Conn will provide a single redis connection from the redis connection pool.
 func (c *RedisStore) Conn(ctx context.Context) (remember.Cacher, error) {
 
-	conn, err := c.pool.GetContext(ctx)
+	conn, err := c.Pool.GetContext(ctx)
 	if err != nil {
 		return nil, err
 	}
