@@ -11,6 +11,9 @@ import (
 	"github.com/rocketlaunchr/remember-go"
 )
 
+// NoExpiration is used to indicate that data should not expire from the cache.
+const NoExpiration time.Duration = -1
+
 // ErrItemDropped signifies that the item to store was not inserted into the cache.
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.Set
@@ -62,7 +65,13 @@ func (r *RistrettoStore) Get(key string) (_ interface{}, found bool, _ error) {
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.SetWithTTL
 func (r *RistrettoStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
-	stored := r.Cache.SetWithTTL(key, itemToStore, 1, expiration)
+	var stored bool
+	if expiration == NoExpiration {
+		stored = r.Cache.Set(key, itemToStore, 1)
+	} else {
+		stored = r.Cache.SetWithTTL(key, itemToStore, 1, expiration)
+	}
+
 	if stored {
 		return nil
 	}
