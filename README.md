@@ -15,7 +15,7 @@
 # Cache Slow Database Queries
 
 This package is used to cache the results of slow database queries in memory or Redis.
-It can be used to cache any form of data (i.e it's not limited to caching database results). A Redis and in-memory storage driver is provided.
+It can be used to cache any form of data (eg. function memoization). A Redis and in-memory storage driver is provided.
 
 See [Article](https://medium.com/@rocketlaunchr.cloud/caching-slow-database-queries-1085d308a0c9) for further details including a tutorial.
 
@@ -134,7 +134,7 @@ return results.([]Result) // Type assert in order to use
 
 ## Gob Register Errors
 
-The Redis storage driver stores the data in a `gob` encoded form. You have to register with the [`gob`](https://golang.org/pkg/encoding/gob/) package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will slightly impact concurrency performance however.
+The Redis storage driver stores the data in a `gob` encoded form. You have to register with the [`gob`](https://golang.org/pkg/encoding/gob/) package the data type returned by the `SlowRetrieve` function. It can be done inside a `func init()`. Alternatively, you can set the `GobRegister` option to true. This will impact concurrency performance and is thus **not recommended**.
 
 ## Other useful packages
 

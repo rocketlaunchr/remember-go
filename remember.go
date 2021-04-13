@@ -6,14 +6,13 @@ import (
 	"context"
 	"encoding/gob"
 	"fmt"
+	"log"
 	"time"
 )
 
-// Cache is used to return a value from the cache if available. If unavailable, it will obtain the value by
-// calling fn and then subsequently saving it into the cache.
-// The behavior can be modified by providing an optional Options struct.
+// Cache is used to return a cached value. If it's not available, fn will be called to obtain a value.
+// Subsequently, fn's value will be saved into the cache.
 func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, fn SlowRetrieve, options ...Options) (_ interface{}, found bool, _ error) {
-
 	var (
 		disableCache  bool
 		fresh         bool
@@ -43,7 +42,6 @@ func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, 
 			}
 			return nil, false, err
 		}
-
 		return out, false, nil
 	}
 
@@ -80,7 +78,6 @@ func Cache(ctx context.Context, c Conner, key string, expiration time.Duration, 
 		if logger != nil && !onlyLogErrors {
 			logger.Log(logPatternBlue, "Found in Cache key: "+key)
 		}
-
 		return item, true, nil
 	}
 
@@ -96,17 +93,19 @@ fresh:
 	}
 
 	if gobRegister {
-		func(itemToStore interface{}) {
+		func() {
 			defer func() {
-				err := recover()
-				if err != nil {
+				if err := recover(); err != nil {
+					msg := fmt.Sprintf("gob register: %v", err)
 					if logger != nil {
-						logger.Log(logPatternRed, fmt.Sprintf("gob register: %v", err))
+						logger.Log(logPatternRed, msg)
+					} else {
+						log.Printf(logPatternRed, msg)
 					}
 				}
 			}()
 			gob.Register(itemToStore)
-		}(itemToStore)
+		}()
 	}
 
 	// Store item in Cache

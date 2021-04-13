@@ -10,6 +10,9 @@ import (
 	"github.com/rocketlaunchr/remember-go"
 )
 
+// NoExpiration is used to indicate that data should not expire from the cache.
+const NoExpiration time.Duration = -1
+
 // MemoryStore is used to create an in-memory cache.
 type MemoryStore struct {
 	cache *cache.Cache

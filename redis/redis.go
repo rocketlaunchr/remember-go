@@ -12,6 +12,9 @@ import (
 	"github.com/rocketlaunchr/remember-go"
 )
 
+// NoExpiration is used to indicate that data should not expire from the cache.
+const NoExpiration time.Duration = -1
+
 // RedisStore is used to create a redis-backed cache.
 type RedisStore struct {
 	Pool *redis.Pool
@@ -81,7 +84,12 @@ func (c *RedisConn) Set(key string, expiration time.Duration, itemToStore interf
 		return err
 	}
 
-	_, err = c.conn.Do("SET", key, b.Bytes(), "EX", int(expiration.Seconds()))
+	if expiration == NoExpiration {
+		_, err = c.conn.Do("SET", key, b.Bytes())
+	} else {
+		_, err = c.conn.Do("SET", key, b.Bytes(), "EX", int(expiration.Seconds()))
+	}
+
 	return err
 }
 
