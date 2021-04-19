@@ -23,20 +23,27 @@ var ErrItemDropped = errors.New("item dropped")
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto
 type RistrettoStore struct {
-	Cache *ristretto.Cache
+	Cache       *ristretto.Cache
+	DefaultCost *int64
 }
 
 // NewRistrettoStore creates an in-memory ristretto cache.
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Config
-func NewRistrettoStore(config *ristretto.Config) *RistrettoStore {
+func NewRistrettoStore(config *ristretto.Config, defaultCost ...int64) *RistrettoStore {
 	cache, err := ristretto.NewCache(config)
 	if err != nil {
 		panic(err)
 	}
 
+	var dc *int64
+	if len(defaultCost) > 0 {
+		dc = &defaultCost[0]
+	}
+
 	return &RistrettoStore{
-		Cache: cache,
+		Cache:       cache,
+		DefaultCost: dc,
 	}
 }
 
@@ -61,15 +68,21 @@ func (r *RistrettoStore) Get(key string) (_ interface{}, found bool, _ error) {
 }
 
 // Set sets a item into the cache for a particular key.
-// The cost is always set to 1.
+// The cost is always set to 1, unless over-ridden at creation.
 //
 // See: https://godoc.org/github.com/dgraph-io/ristretto#Cache.SetWithTTL
 func (r *RistrettoStore) Set(key string, expiration time.Duration, itemToStore interface{}) error {
-	var stored bool
+	var (
+		stored bool
+		cost   int64 = 1
+	)
+	if r.DefaultCost != nil {
+		cost = *r.DefaultCost
+	}
 	if expiration == NoExpiration {
-		stored = r.Cache.Set(key, itemToStore, 1)
+		stored = r.Cache.Set(key, itemToStore, cost)
 	} else {
-		stored = r.Cache.SetWithTTL(key, itemToStore, 1, expiration)
+		stored = r.Cache.SetWithTTL(key, itemToStore, cost, expiration)
 	}
 
 	if stored {
