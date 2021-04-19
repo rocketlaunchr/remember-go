@@ -12,7 +12,7 @@ import (
 )
 
 // NoExpiration is used to indicate that data should not expire from the cache.
-const NoExpiration time.Duration = -1
+const NoExpiration time.Duration = 0
 
 // ErrItemDropped signifies that the item to store was not inserted into the cache.
 //
